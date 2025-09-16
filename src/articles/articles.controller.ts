@@ -8,8 +8,8 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
-  create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articlesService.create(createArticleDto);
+  async create(@Body() dto: CreateArticleDto) {
+    return this.articlesService.create(dto);
   }
 
   @Get()
