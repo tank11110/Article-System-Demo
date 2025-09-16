@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ArticlesService {
@@ -28,8 +29,18 @@ export class ArticlesService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} article`;
+  async findOne(id: number) {
+    const article = await this.prisma.article.findUnique({
+      where: { id: id },
+      select: {
+        author: true,
+        title: true,
+        content: true,
+        createdAt: true,
+      },
+    });
+    if (!article) throw new NotFoundException(`Article ${id} not found`);
+    return article;
   }
 
   update(id: number, updateArticleDto: UpdateArticleDto) {
