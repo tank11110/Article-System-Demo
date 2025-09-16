@@ -22,8 +22,10 @@ export class ArticlesService {
     });
   }
 
-  findAll() {
-    return `This action returns all articles`;
+  async findAll() {
+    return this.prisma.article.findMany({
+      orderBy: { id: 'desc' },
+    });
   }
 
   findOne(id: number) {

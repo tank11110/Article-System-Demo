@@ -13,9 +13,18 @@ export class ArticlesController {
   }
 
   @Get()
-  findAll() {
-    return this.articlesService.findAll();
-  }
+  async findAll() {
+    const articles = await this.articlesService.findAll();
+
+    return {
+      articles: articles.map(a => ({
+        id: a.id,
+        author: a.author,
+        title: a.title,
+        createdAt: a.createdAt,
+        })),
+      };
+    }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
