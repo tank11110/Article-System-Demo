@@ -16,9 +16,20 @@ export class CommentsController {
   }
 
   @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
+  async findAll(
+    @Param('id', ParseIntPipe) articleId: number,
+  ) {
+    const comments = await this.commentsService.findAllByArticleID(articleId);
+
+    return {
+      comments: comments.map(a => ({
+        id: a.id,
+        author: a.author,
+        content: a.content,
+        createdAt: a.createdAt,
+        })),
+      };
+    }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -28,8 +28,23 @@ export class CommentsService {
     });
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async findAllByArticleID(articleId: number) {
+    const article = await this.prisma.article.findUnique({
+      where: { id: articleId },
+      select: { id: true },
+    });
+    if (!article) throw new NotFoundException(`Article ${articleId} not found`);
+
+    return this.prisma.comment.findMany({
+      where: { articleId: articleId},
+      select: {
+        id: true,
+        author: true,
+        content: true,
+        createdAt: true,
+      },
+      orderBy: { id: 'desc' },
+    });
   }
 
   findOne(id: number) {
