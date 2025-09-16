@@ -20,3 +20,11 @@ model Article {
   content   String
   createdAt DateTime @default(now())
 }
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  articleId  Int
+  author     String
+  content    String
+  createdAt  DateTime @default(now())
+}
